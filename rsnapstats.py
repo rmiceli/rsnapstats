@@ -65,6 +65,8 @@ def main():
       #src is always second to last argument
       #then remove user name before @
       data.append(line.split()[-2].split('@')[-1])
+    elif "rsync error" in line or "ERROR" in line:
+      print line
     elif "Number of files" in line:
       data.append(parseline(line))
     elif "Number of files transferred" in line:
