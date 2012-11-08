@@ -1,7 +1,7 @@
 rsnapstats
 ==========
 
-Prints out stats from rsnapshot run. Inspired by rsnapreport.pl
+Prints out statistics from rsnapshot run. Inspired by rsnapreport.pl
 
 Tested with rsnapshot 1.3.1 and rsync 3.0.7
 
