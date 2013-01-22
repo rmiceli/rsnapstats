@@ -77,39 +77,39 @@ def main():
       line = line + tmp
 
     # sort through line by line
-    if "/usr/bin/rsync" in line:
+    if "rsync error" in line or "ERROR" in line or "rsync warning" in line:
+      print line
+    elif "rsync" in line:
       stats_dict = initStats()
       #src is always second to last argument
       #then remove user name before @
       stats_dict['source'] = line.split()[-2].split('@')[-1]
-    elif "rsync error" in line or "ERROR" in line:
-      print line
     elif "Number of files:" in line:
-      stats_dict['numFiles'] = parseline(line)
+      stats_dict['numFiles'] = parseline(line)[0]
     elif "Number of files transferred:" in line:
-      stats_dict['numFilesTx'] = parseline(line)
+      stats_dict['numFilesTx'] = parseline(line)[0]
     elif "Total file size:" in line:
-      stats_dict['fileSize'] = parseline(line)
+      stats_dict['fileSize'] = parseline(line)[0]
     elif "Total transferred file size:" in line:
-      stats_dict['fileSizeTx'] = parseline(line)
+      stats_dict['fileSizeTx'] = parseline(line)[0]
     elif "Literal data:" in line:
-      stats_dict['litData'] = parseline(line)
+      stats_dict['litData'] = parseline(line)[0]
     elif "Matched data:" in line:
-      stats_dict['matchedData'] = parseline(line)
+      stats_dict['matchedData'] = parseline(line)[0]
     elif "File list size:" in line:
-      stats_dict['listSize'] = parseline(line)
+      stats_dict['listSize'] = parseline(line)[0]
     elif "File list generation time:" in line:
-      stats_dict['listGen'] = parseline(line)
+      stats_dict['listGen'] = parseline(line)[0]
     elif "File list transfer time:" in line:
-      stats_dict['listTx'] = parseline(line)
+      stats_dict['listTx'] = parseline(line)[0]
     elif "bytes/sec" in line:
-      stats_dict['txSpeed'] = parseline(line)
+      stats_dict['txSpeed'] = parseline(line)[2]
     elif "Total bytes sent:" in line:
-      stats_dict['bytesSent'] = parseline(line)
+      stats_dict['bytesSent'] = parseline(line)[0]
     elif "Total bytes received:" in line:
-      stats_dict['bytesRec'] = parseline(line)
+      stats_dict['bytesRec'] = parseline(line)[0]
     elif "total size is" in line:
-      stats_dict['speedup'] = parseline(line)
+      stats_dict['speedup'] = parseline(line)[1]
       stats.append(stats_dict)
 
     line = ''
@@ -117,11 +117,11 @@ def main():
   for idx,val in enumerate(stats):
     # print stats
     print stats[idx]['source'], "\n", \
-      "\t files backed-up:", int(stats[idx]['numFiles'][0]), "("+humanize_bytes(stats[idx]['fileSize'][0],2)+")\n", \
-      "\t files updated:", int(stats[idx]['numFilesTx'][0]), "("+humanize_bytes(stats[idx]['fileSizeTx'][0],2)+")\n", \
-      "\t sent/received:", humanize_bytes(stats[idx]['bytesSent'][0],2), "/", humanize_bytes(stats[idx]['bytesRec'][0],2),"\n", \
-      "\t transfer rate:", humanize_bytes(stats[idx]['txSpeed'][2],2)+"/sec\n", \
-      "\t speedup:", stats[idx]['speedup'][1]
+      "\t files backed-up:", int(stats[idx]['numFiles']), "("+humanize_bytes(stats[idx]['fileSize'],2)+")\n", \
+      "\t files updated:", int(stats[idx]['numFilesTx']), "("+humanize_bytes(stats[idx]['fileSizeTx'],2)+")\n", \
+      "\t sent/received:", humanize_bytes(stats[idx]['bytesSent'],2), "/", humanize_bytes(stats[idx]['bytesRec'],2),"\n", \
+      "\t transfer rate:", humanize_bytes(stats[idx]['txSpeed'],2)+"/sec\n", \
+      "\t speedup:", stats[idx]['speedup']
 
 if __name__ == '__main__':
   main()
