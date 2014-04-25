@@ -3,7 +3,7 @@ rsnapstats
 
 Prints out statistics from rsnapshot run. Based on rsnapreport.pl
 
-Tested with rsnapshot 1.3.1 and rsync 3.0.7
+Tested with rsnapshot 1.3.1 and rsync 3.1.0
 
 Usage
 ==========

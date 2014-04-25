@@ -2,7 +2,7 @@
 # Prints out statistics from rsnapshot runs.
 # Based on rsnapreport.pl by William Bear
 #
-# Copyright 2012 Rob Miceli
+# Copyright 2014 Rob Miceli
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,12 +25,7 @@ def parseline(line):
     Extracts the number (float or int) from the string 'line' and
     appends it as a float
   """
-  dum = []
-  words = line.split()
-  for ii in words:
-    if ii[0].isdigit():
-      dum.append(float(ii))
-  return dum
+  return [float(s) for s in line.replace(',','').split() if s[-1].isdigit()]
 
 def humanize_bytes(bytes, precision=1):
   """
@@ -61,6 +56,24 @@ def initStats():
           'fileSizeTx', 'litData', 'matchedData', 'listSize', 'listGen',
           'listTx', 'bytesSent', 'bytesRec', 'txSpeed', 'speedup'])
 
+def rstats(object):
+  def __init__(self):
+    self.source = ''
+    self.numFiles = 0
+    self.fileSize = 0
+    self.fileSizeTx = 0
+    self.litData = 0
+    self.matchedData = 0
+    self.listSize = 0
+    self.listGen = 0
+    self.listTx = 0
+    self.bytesSent = 0
+    self.bytesRec = 0
+    self.txSpeed = 0
+    self.speedup = 0
+
+  def __str__(self,param):
+    return humanize_bytes(self.param,2)
 
 def main():
   # initialize
@@ -86,7 +99,7 @@ def main():
       stats_dict['source'] = line.split()[-2].split('@')[-1]
     elif "Number of files:" in line:
       stats_dict['numFiles'] = parseline(line)[0]
-    elif "Number of files transferred:" in line:
+    elif "Number of regular files transferred:" in line:
       stats_dict['numFilesTx'] = parseline(line)[0]
     elif "Total file size:" in line:
       stats_dict['fileSize'] = parseline(line)[0]
@@ -102,12 +115,12 @@ def main():
       stats_dict['listGen'] = parseline(line)[0]
     elif "File list transfer time:" in line:
       stats_dict['listTx'] = parseline(line)[0]
-    elif "bytes/sec" in line:
-      stats_dict['txSpeed'] = parseline(line)[2]
     elif "Total bytes sent:" in line:
       stats_dict['bytesSent'] = parseline(line)[0]
     elif "Total bytes received:" in line:
       stats_dict['bytesRec'] = parseline(line)[0]
+    elif "bytes/sec" in line:
+      stats_dict['txSpeed'] = parseline(line)[2]
     elif "total size is" in line:
       stats_dict['speedup'] = parseline(line)[1]
       stats.append(stats_dict)
