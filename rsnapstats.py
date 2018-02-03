@@ -79,6 +79,7 @@ def main():
   # initialize
   stats = []
   line = ''
+  initialized = False
 
   # get rsync stats
   for tmp in sys.stdin:
@@ -92,11 +93,12 @@ def main():
     # sort through line by line
     if "rsync error" in line or "ERROR" in line or "rsync warning" in line:
       print line
-    elif "rsync" in line:
+    elif "rsync" in line and not initialized:
       stats_dict = initStats()
       #src is always second to last argument
       #then remove user name before @
       stats_dict['source'] = line.split()[-2].split('@')[-1]
+      initialized = True
     elif "Number of files:" in line:
       stats_dict['numFiles'] = parseline(line)[0]
     elif "Number of regular files transferred:" in line:
