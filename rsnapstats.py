@@ -92,7 +92,7 @@ def main():
     # sort through line by line
     if "rsync error" in line or "ERROR" in line or "rsync warning" in line:
       print line
-    elif "/usr/bin/rsync" in line:
+    elif "/usr/bin/rsync" in line and len(line.split()) > 1:
       stats_dict = initStats()
       #src is always second to last argument
       #then remove user name before @
