@@ -1,38 +1,35 @@
-# rsnapstats
-# Prints out statistics from rsnapshot runs.
-# Based on rsnapreport.pl by William Bear
-#
-# Copyright 2014 Rob Miceli
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+'''
+rsnapstats
+Parses and prints statistics from rsnapshot backups
+Based on rsnapreport.pl by William Bear
+
+:author: Rob Miceli
+:created: 2018 03 12
+:copyright: 2018, Rob Miceli
+:license: GPL 2.0, see COPYING for more details
+'''
 
 import sys
 
 def parseline(line):
-  """
-    Extracts the number (float or int) from the string 'line' and
-    appends it as a float
-  """
+    '''
+    Extracts the number (float or int) from a string and appends it as a float
+
+    :param line: string of text
+    :return: list of numbers contained in input
+    '''
   return [float(s) for s in line.replace(',','').split() if s[-1].isdigit()]
 
 def humanize_bytes(bytes, precision=1):
-  """
+    '''
     Return a humanized string representation of a number of bytes
     >>> humanize_bytes(1024*1234*1111,2)
     '1.31 GB'
-  """
+
+    :param size_bytes: Size in bytes
+    :param precision: Number of decimal places of output
+    :return: A humanized string representation of a number of bytes
+    '''
   abbrevs = (
       (1<<50L, 'PB'),
       (1<<40L, 'TB'),
@@ -49,9 +46,11 @@ def humanize_bytes(bytes, precision=1):
   return '%.*f %s' % (precision, bytes / factor, suffix)
 
 def initStats():
-  """
-    Return a dict of all the stats that rsync outputs
-  """
+    '''
+    Initialize stats dictionary
+
+    :return: dict with keys for each stats that rsync outputs
+    '''
   return dict.fromkeys(['source', 'numFiles', 'numFilesTx', 'fileSize',
           'fileSizeTx', 'litData', 'matchedData', 'listSize', 'listGen',
           'listTx', 'bytesSent', 'bytesRec', 'txSpeed', 'speedup'])
