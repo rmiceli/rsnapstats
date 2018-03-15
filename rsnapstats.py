@@ -21,7 +21,7 @@ def parseline(line):
     '''
     return [float(s) for s in line.replace(',','').split() if s[-1].isdigit()]
 
-def humanize_bytes(bytes, precision=1):
+def humanize_bytes(size_bytes, precision=1):
     '''
     Return a humanized string representation of a number of bytes
     >>> humanize_bytes(1024*1234*1111,2)
