@@ -12,14 +12,23 @@ Based on rsnapreport.pl by William Bear
 from __future__ import print_function
 import sys
 
-def parseline(line):
+def is_number(string):
+    try:
+        float(string)
+        return True
+    except ValueError:
+        return False
+
+def parseline(line, index):
     '''
     Extracts the number (float or int) from a string and appends it as a float
 
     :param line: string of text
-    :return: list of numbers contained in input
+    :param index: index of number to return
+    :return: number at location "index" contained in input converted to float
     '''
-    return [float(s) for s in line.replace(',','').split() if s[-1].isdigit()]
+    number_list = [float(s) for s in line.replace(',', '').split() if is_number(s)]
+    return number_list[index]
 
 def humanize_bytes(size_bytes, precision=1):
     '''
@@ -82,43 +91,43 @@ for tmp in sys.stdin:
         stats_dict['source'] = line.split()[-2].split('@')[-1]
 
     elif "Number of files:" in line:
-        stats_dict['numFiles'] = parseline(line)[0]
+        stats_dict['numFiles'] = int(parseline(line, 0))
 
     elif "Number of regular files transferred:" in line:
-        stats_dict['numFilesTx'] = parseline(line)[0]
+        stats_dict['numFilesTx'] = int(parseline(line, 0))
 
     elif "Total file size:" in line:
-        stats_dict['fileSize'] = parseline(line)[0]
+        stats_dict['fileSize'] = parseline(line, 0)
 
     elif "Total transferred file size:" in line:
-        stats_dict['fileSizeTx'] = parseline(line)[0]
+        stats_dict['fileSizeTx'] = parseline(line, 0)
 
     elif "Literal data:" in line:
-        stats_dict['litData'] = parseline(line)[0]
+        stats_dict['litData'] = parseline(line, 0)
 
     elif "Matched data:" in line:
-        stats_dict['matchedData'] = parseline(line)[0]
+        stats_dict['matchedData'] = parseline(line, 0)
 
     elif "File list size:" in line:
-        stats_dict['listSize'] = parseline(line)[0]
+        stats_dict['listSize'] = parseline(line, 0)
 
     elif "File list generation time:" in line:
-        stats_dict['listGen'] = parseline(line)[0]
+        stats_dict['listGen'] = parseline(line, 0)
 
     elif "File list transfer time:" in line:
-        stats_dict['listTx'] = parseline(line)[0]
+        stats_dict['listTx'] = parseline(line, 0)
 
     elif "Total bytes sent:" in line:
-        stats_dict['bytesSent'] = parseline(line)[0]
+        stats_dict['bytesSent'] = parseline(line, 0)
 
     elif "Total bytes received:" in line:
-        stats_dict['bytesRec'] = parseline(line)[0]
+        stats_dict['bytesRec'] = parseline(line, 0)
 
     elif "bytes/sec" in line:
-        stats_dict['txSpeed'] = parseline(line)[2]
+        stats_dict['txSpeed'] = parseline(line, 2)
 
     elif "total size is" in line:
-        stats_dict['speedup'] = parseline(line)[1]
+        stats_dict['speedup'] = parseline(line, 1)
         stats.append(stats_dict)
 
     line = ''
