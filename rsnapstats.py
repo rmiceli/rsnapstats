@@ -125,18 +125,13 @@ for tmp in sys.stdin:
 
 for idx, val in enumerate(stats):
     # print stats
-    print(stats[idx]['source'] + "\n",
-          "\t files backed-up: %d (%s)\n"
-            % (stats[idx]['numFiles'],
-               humanize_bytes(stats[idx]['fileSize'], 2)),
-          "\t files updated: %d (%s)\n"
-            % (stats[idx]['numFilesTx'],
-               humanize_bytes(stats[idx]['fileSizeTx'], 2)),
-          "\t sent/received: %s / %s\n"
-            % (humanize_bytes(stats[idx]['bytesSent'], 2),
-               humanize_bytes(stats[idx]['bytesRec'], 2)),
-          "\t transfer rate: %s/sec\n"
-            % humanize_bytes(stats[idx]['txSpeed'], 2),
-          "\t speedup: %.2f"
-            % stats[idx]['speedup'])
+    line1 = ("{:,}".format(stats[idx]['numFiles']), humanize_bytes(stats[idx]['fileSize'],2))
+    line2 = ("{:,}".format(stats[idx]['numFilesTx']), humanize_bytes(stats[idx]['fileSizeTx'],2))
+    line3 = (humanize_bytes(stats[idx]['bytesSent'],2), humanize_bytes(stats[idx]['bytesRec'],2))
+    line4 = humanize_bytes(stats[idx]['txSpeed'],2)
+    line5 = stats[idx]['speedup']
+
+    print(stats[idx]['source'], "\n\t files backed-up: %s (%s)\n" % line1,
+      "\t files updated: %s (%s)\n" % line2, "\t sent/received: %s / %s\n" % line3,
+      "\t transfer rate: %s/sec\n" % line4, "\t speedup: %.2f" % line5)
 
