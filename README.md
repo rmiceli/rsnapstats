@@ -7,7 +7,7 @@ Tested with rsnapshot 1.3.1 and rsync 3.1.0
 
 Usage
 ==========
- 1. In the rsnapshot.conf set verbose >= 3
+ 1. In the rsnapshot.conf set verbose >= 4
  2. Also add --stats to rsync_long_args in the rsnapshot.conf
  3. To mail the stats to yourself setup crontab with:
 
